@@ -3,8 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import AuthCard from "@/components/auth/auth-card";
+import { useSignupMutation } from "@/hooks/auth/useSignupMutation";
 
-function getStrength(v: string): { level: number; label: string; color: string } {
+function getStrength(v: string): {
+  level: number;
+  label: string;
+  color: string;
+} {
   if (!v) return { level: 0, label: "", color: "" };
   if (v.length < 6) return { level: 1, label: "약함", color: "#F87171" };
   if (v.length < 10) return { level: 2, label: "보통", color: "#FBBF24" };
@@ -17,6 +22,7 @@ export default function SignupPage() {
   const [done, setDone] = useState(false);
 
   const strength = getStrength(password);
+  const { mutate: signup, isPending } = useSignupMutation();
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -27,7 +33,18 @@ export default function SignupPage() {
       return;
     }
     setError(false);
-    setDone(true);
+    signup(
+      { email, password },
+      {
+        onSuccess: () => {
+          setDone(true);
+        },
+        onError: (error) => {
+          console.error(error);
+          setError(true);
+        },
+      },
+    );
   }
 
   if (done) {
@@ -37,9 +54,13 @@ export default function SignupPage() {
           <div className="w-[52px] h-[52px] rounded-full flex items-center justify-center text-[24px] mb-4 border border-[rgba(52,211,153,0.25)] bg-[rgba(52,211,153,0.12)]">
             ✓
           </div>
-          <h3 className="text-[15px] font-medium mb-2">이메일을 확인해주세요</h3>
+          <h3 className="text-[15px] font-medium mb-2">
+            이메일을 확인해주세요
+          </h3>
           <p className="text-[13px] leading-relaxed text-muted">
-            입력하신 주소로 인증 링크를 보냈어요.<br />링크를 클릭하면 바로 시작할 수 있어요.
+            입력하신 주소로 인증 링크를 보냈어요.
+            <br />
+            링크를 클릭하면 바로 시작할 수 있어요.
           </p>
         </div>
       </AuthCard>
@@ -58,7 +79,9 @@ export default function SignupPage() {
         type="button"
         className="w-full flex items-center justify-center gap-[9px] rounded-[9px] px-4 py-[11px] text-[13px] font-medium border border-border [border-width:0.5px] mb-[18px] hover:opacity-80 transition-opacity bg-overlay text-foreground"
       >
-        <span className="w-[18px] h-[18px] bg-white rounded-full flex items-center justify-center text-[11px] font-bold text-[#4285F4] shrink-0">G</span>
+        <span className="w-[18px] h-[18px] bg-white rounded-full flex items-center justify-center text-[11px] font-bold text-[#4285F4] shrink-0">
+          G
+        </span>
         Google로 계속하기
       </button>
 
@@ -71,7 +94,9 @@ export default function SignupPage() {
 
       <form onSubmit={handleSubmit} className="flex flex-col">
         <div className="mb-[13px]">
-          <label className="block text-[11px] font-medium mb-[6px] tracking-wide text-muted">이메일</label>
+          <label className="block text-[11px] font-medium mb-[6px] tracking-wide text-muted">
+            이메일
+          </label>
           <input
             name="email"
             type="email"
@@ -81,7 +106,9 @@ export default function SignupPage() {
         </div>
 
         <div className="mb-[13px]">
-          <label className="block text-[11px] font-medium mb-[6px] tracking-wide text-muted">비밀번호</label>
+          <label className="block text-[11px] font-medium mb-[6px] tracking-wide text-muted">
+            비밀번호
+          </label>
           <input
             name="password"
             type="password"
@@ -97,11 +124,18 @@ export default function SignupPage() {
                   <div
                     key={i}
                     className="flex-1 h-[2px] rounded-sm transition-colors duration-300"
-                    style={{ background: i <= strength.level ? strength.color : "var(--color-overlay)" }}
+                    style={{
+                      background:
+                        i <= strength.level
+                          ? strength.color
+                          : "var(--color-overlay)",
+                    }}
                   />
                 ))}
               </div>
-              <span className="text-[10px]" style={{ color: strength.color }}>{strength.label}</span>
+              <span className="text-[10px]" style={{ color: strength.color }}>
+                {strength.label}
+              </span>
             </div>
           )}
         </div>
@@ -115,8 +149,9 @@ export default function SignupPage() {
         <button
           type="submit"
           className="w-full rounded-[9px] py-[11px] text-[13px] font-medium text-white mb-4 transition-opacity hover:opacity-85 bg-primary"
+          disabled={isPending}
         >
-          회원가입
+          {isPending ? "회원가입 중..." : "회원가입"}
         </button>
       </form>
 

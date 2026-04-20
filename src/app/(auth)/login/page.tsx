@@ -3,19 +3,36 @@
 import { useState } from "react";
 import Link from "next/link";
 import AuthCard from "@/components/auth/auth-card";
+import { useSigninMutation } from "@/hooks/auth/useSigninMutation";
+import { signInWithGoogle } from "@/lib/auth/actions";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [error, setError] = useState(false);
-
+  const { mutate: signin, isPending } = useSigninMutation();
+  const router = useRouter();
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
     const email = (form.elements.namedItem("email") as HTMLInputElement).value;
-    const password = (form.elements.namedItem("password") as HTMLInputElement).value;
+    const password = (form.elements.namedItem("password") as HTMLInputElement)
+      .value;
     if (!email || !password) {
       setError(true);
     } else {
       setError(false);
+      signin(
+        { email, password },
+        {
+          onSuccess: () => {
+            router.push("/");
+          },
+          onError: (error) => {
+            console.error(error);
+            setError(true);
+          },
+        },
+      );
     }
   }
 
@@ -27,13 +44,17 @@ export default function LoginPage() {
       </p>
 
       {/* Google */}
-      <button
-        type="button"
-        className="w-full flex items-center justify-center gap-[9px] rounded-[9px] px-4 py-[11px] text-[13px] font-medium border border-border [border-width:0.5px] mb-[18px] hover:opacity-80 transition-opacity bg-overlay text-foreground"
-      >
-        <span className="w-[18px] h-[18px] bg-white rounded-full flex items-center justify-center text-[11px] font-bold text-[#4285F4] shrink-0">G</span>
-        Google로 계속하기
-      </button>
+      <form action={signInWithGoogle}>
+        <button
+          type="submit"
+          className="w-full flex items-center justify-center gap-[9px] rounded-[9px] px-4 py-[11px] text-[13px] font-medium border border-border [border-width:0.5px] mb-[18px] hover:opacity-80 transition-opacity bg-overlay text-foreground"
+        >
+          <span className="w-[18px] h-[18px] bg-white rounded-full flex items-center justify-center text-[11px] font-bold text-[#4285F4] shrink-0">
+            G
+          </span>
+          Google로 계속하기
+        </button>
+      </form>
 
       {/* Divider */}
       <div className="flex items-center gap-[10px] mb-[18px]">
@@ -44,7 +65,9 @@ export default function LoginPage() {
 
       <form onSubmit={handleSubmit} className="flex flex-col">
         <div className="mb-[13px]">
-          <label className="block text-[11px] font-medium mb-[6px] tracking-wide text-muted">이메일</label>
+          <label className="block text-[11px] font-medium mb-[6px] tracking-wide text-muted">
+            이메일
+          </label>
           <input
             name="email"
             type="email"
@@ -54,7 +77,9 @@ export default function LoginPage() {
         </div>
 
         <div className="mb-[6px]">
-          <label className="block text-[11px] font-medium mb-[6px] tracking-wide text-muted">비밀번호</label>
+          <label className="block text-[11px] font-medium mb-[6px] tracking-wide text-muted">
+            비밀번호
+          </label>
           <input
             name="password"
             type="password"
@@ -64,7 +89,9 @@ export default function LoginPage() {
         </div>
 
         <div className="flex justify-end mb-[13px]">
-          <span className="text-[11px] cursor-pointer text-primary-light">비밀번호 찾기</span>
+          <span className="text-[11px] cursor-pointer text-primary-light">
+            비밀번호 찾기
+          </span>
         </div>
 
         {error && (
@@ -76,8 +103,9 @@ export default function LoginPage() {
         <button
           type="submit"
           className="w-full rounded-[9px] py-[11px] text-[13px] font-medium text-white mb-4 transition-opacity hover:opacity-85 bg-primary"
+          disabled={isPending}
         >
-          로그인
+          {isPending ? "로그인 중..." : "로그인"}
         </button>
       </form>
 

@@ -13,6 +13,7 @@ export const useSignupMutation = () => {
       password: string;
     }) => {
       const result = await signUp(email, password);
+
       if (!result.success) throw new Error(result.error);
       return result;
     },

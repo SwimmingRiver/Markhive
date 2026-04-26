@@ -1,27 +1,29 @@
 @import "tailwindcss";
 
 @theme {
-  --color-canvas: #0F0F14;
-  --color-surface: #16161F;
-  --color-overlay: #1C1C28;
-  --color-border: rgba(255,255,255,0.07);
-  --color-border-focus: rgba(99,102,241,0.35);
-  --color-foreground: #EEEEF5;
-  --color-muted: #9898AA;
-  --color-subtle: #55556A;
-  --color-primary: #6366F1;
-  --color-primary-light: #818CF8;
-  --color-primary-soft: rgba(99,102,241,0.12);
-  --color-error: #F87171;
-  --color-error-bg: rgba(248,113,113,0.1);
-  --color-success: #34D399;
+  --color-canvas: #0f0f14;
+  --color-surface: #16161f;
+  --color-overlay: #1c1c28;
+  --color-border: rgba(255, 255, 255, 0.07);
+  --color-border-focus: rgba(99, 102, 241, 0.35);
+  --color-foreground: #eeeef5;
+  --color-muted: #9898aa;
+  --color-subtle: #55556a;
+  --color-primary: #6366f1;
+  --color-primary-light: #818cf8;
+  --color-primary-soft: rgba(99, 102, 241, 0.12);
+  --color-error: #f87171;
+  --color-error-bg: rgba(248, 113, 113, 0.1);
+  --color-success: #34d399;
 
   --font-serif: var(--font-instrument-serif), serif;
   --font-sans: var(--font-dm-sans), sans-serif;
 }
 
-body {
+body,
+main {
   background-color: var(--color-canvas);
   color: var(--color-foreground);
   font-family: var(--font-sans);
+  height: 100dvh;
 }

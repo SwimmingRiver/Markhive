@@ -1,5 +1,5 @@
 import createClient from "@/lib/supabase/server";
-import Header from "@/components/layout/header";
+import ClientLayout from "@/components/layout/clientLayout";
 
 export default async function AppLayout({
   children,
@@ -12,9 +12,8 @@ export default async function AppLayout({
   } = await supabase.auth.getUser();
 
   return (
-    <div>
-      <Header email={user?.email ?? ""} />
-      <main>{children}</main>
-    </div>
+    <ClientLayout email={user?.email ?? ""}>
+      <main className="flex-1 overflow-auto">{children}</main>
+    </ClientLayout>
   );
 }

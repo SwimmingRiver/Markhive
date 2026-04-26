@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 
 import {
   BookmarkIcon,
@@ -9,16 +8,19 @@ import {
   SearchIcon,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
-const menuItems = [
+const MENU_ITEMS = [
   { href: "/", icon: HomeIcon, label: "홈" },
   { href: "/bookmark", icon: BookmarkIcon, label: "북마크" },
   { href: "/search", icon: SearchIcon, label: "검색" },
 ];
-const libraryItems = [
+
+const LIBRARY_ITEMS = [
   { href: "/library", icon: FolderIcon, label: "전체" },
   { href: "/library/unread", icon: HistoryIcon, label: "안읽음" },
 ];
+
 const getItemsStyle = (pathname: string, href: string) => {
   return `flex items-center gap-2 px-4 py-3 ${pathname === href ? "bg-primary-soft" : ""}`;
 };
@@ -26,10 +28,11 @@ const getItemsStyle = (pathname: string, href: string) => {
 export default function SNB() {
   const pathname = usePathname();
   return (
-    <div className="w-56 h-full border-r border-border bg-surface h-full">
+    <div className="w-56 h-full border-r border-border bg-surface">
       <div className="px-2 py-3">
         <span className="text-[12px] text-muted">메뉴</span>
-        {menuItems.map((item) => (
+
+        {MENU_ITEMS.map((item) => (
           <Link
             key={item.href}
             href={item.href}
@@ -42,7 +45,7 @@ export default function SNB() {
       </div>
       <div className="px-2 py-3">
         <span className="text-[12px] text-muted">라이브러리</span>
-        {libraryItems.map((item) => (
+        {LIBRARY_ITEMS.map((item) => (
           <Link
             key={item.href}
             href={item.href}

@@ -28,7 +28,7 @@ async function getSupabaseWithUser(req: NextRequest) {
   return { supabase, user };
 }
 
-export const GET = async (req: NextRequest) => {
+export const getBookmarks = async (req: NextRequest) => {
   const { supabase, user } = await getSupabaseWithUser(req);
 
   if (!user) {
@@ -47,7 +47,7 @@ export const GET = async (req: NextRequest) => {
   return NextResponse.json(data);
 };
 
-export const POST = async (req: NextRequest) => {
+export const addBookmark = async (req: NextRequest) => {
   const { supabase, user } = await getSupabaseWithUser(req);
 
   if (!user) {

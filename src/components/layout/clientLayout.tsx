@@ -28,7 +28,7 @@ export default function ClientLayout({ children, email }: ClientLayoutProps) {
         >
           <SNB />
         </div>
-        {children}
+        <div className="flex-1 p-4">{children}</div>
       </div>
     </div>
   );

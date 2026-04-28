@@ -10,7 +10,7 @@ export async function parseMetadata(url: string): Promise<Metadata> {
       signal: AbortSignal.timeout(5000),
     })
 
-    if (!res.ok) return { title: null, summary: null }
+    if (!res.ok) return { title: null, description: null }
 
     const html = await res.text()
 
@@ -26,7 +26,7 @@ export async function parseMetadata(url: string): Promise<Metadata> {
 
     return { title, description }
   } catch {
-    return { title: null, summary: null }
+    return { title: null, description: null }
   }
 }
 

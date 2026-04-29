@@ -2,8 +2,13 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { MoreHorizontalIcon, CheckIcon, TrashIcon, ExternalLinkIcon } from "lucide-react";
-import { useGetBookmarksQuery } from "@/hooks/bookmarks/useGetBookmarksQuery";
+import {
+  MoreHorizontalIcon,
+  CheckIcon,
+  TrashIcon,
+  ExternalLinkIcon,
+} from "lucide-react";
+import { useReadBookmarksQuery } from "@/hooks/bookmarks/useReadBookmarksQuery";
 import { useUpdateBookmarkMutation } from "@/hooks/bookmarks/useUpdateBookmarkMutation";
 
 function BookmarkMenu({ id, isRead }: { id: string; isRead: boolean }) {
@@ -50,8 +55,8 @@ function BookmarkMenu({ id, isRead }: { id: string; isRead: boolean }) {
             onClick={(e) => e.stopPropagation()}
             className="w-full flex items-center gap-2.5 px-3 py-2 text-[13px] text-foreground hover:bg-surface transition-colors"
           >
-            <ExternalLinkIcon className="w-3.5 h-3.5 text-muted" />
-            새 탭에서 열기
+            <ExternalLinkIcon className="w-3.5 h-3.5 text-muted" />새 탭에서
+            열기
           </button>
           <div className="h-px bg-border mx-2" />
           <button
@@ -68,14 +73,17 @@ function BookmarkMenu({ id, isRead }: { id: string; isRead: boolean }) {
 }
 
 export default function RecentBookmarks() {
-  const { data: bookmarks, isLoading } = useGetBookmarksQuery();
+  const { data: bookmarks, isLoading } = useReadBookmarksQuery();
 
   if (isLoading) {
     return (
       <div className="w-full max-w-[720px]">
         <div className="flex flex-col gap-2">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-[52px] bg-surface border border-border rounded-lg animate-pulse" />
+            <div
+              key={i}
+              className="h-[52px] bg-surface border border-border rounded-lg animate-pulse"
+            />
           ))}
         </div>
       </div>
@@ -112,7 +120,9 @@ export default function RecentBookmarks() {
               <div className="text-[13px] font-medium text-foreground truncate mb-0.5">
                 {bookmark.title ?? bookmark.url}
               </div>
-              <div className="text-[11.5px] text-subtle truncate">{bookmark.url}</div>
+              <div className="text-[11.5px] text-subtle truncate">
+                {bookmark.url}
+              </div>
             </div>
             <div className="flex gap-1.5 shrink-0">
               {bookmark.bookmark_tags.slice(0, 2).map(({ tags }) =>
@@ -123,7 +133,7 @@ export default function RecentBookmarks() {
                   >
                     {tags.name}
                   </span>
-                ) : null
+                ) : null,
               )}
             </div>
             {!bookmark.is_read && (

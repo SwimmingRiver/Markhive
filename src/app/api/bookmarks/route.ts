@@ -4,6 +4,7 @@ import { createServerClient } from "@supabase/ssr";
 import createClient from "@/lib/supabase/server";
 import { parseMetadata } from "@/lib/metadata";
 import { Database } from "@/types/database.types";
+import { analyzeBookmark } from "@/lib/ai";
 
 const schema = z.object({ url: z.string().url() });
 
@@ -37,7 +38,7 @@ export const GET = async (req: NextRequest) => {
 
   const { data, error } = await supabase
     .from("bookmarks")
-    .select("*")
+    .select("*, bookmark_tags(tags(name))")
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -66,20 +67,43 @@ export const POST = async (req: NextRequest) => {
   }
 
   const { title, description } = await parseMetadata(parsed.data.url);
+  const { summary, tags } = await analyzeBookmark({
+    url: parsed.data.url,
+    title,
+    description,
+  });
 
-  const { data, error } = await supabase
+  const { data: bookmark, error: bookmarkError } = await supabase
     .from("bookmarks")
     .insert({
       url: parsed.data.url,
       user_id: user.id,
       title,
       description,
+      summary,
     })
     .select()
     .single();
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+
+  if (bookmarkError) {
+    return NextResponse.json({ error: bookmarkError.message }, { status: 500 });
   }
 
-  return NextResponse.json(data, { status: 201 });
+  if (tags.length > 0) {
+    const { data: tagRows, error: tagError } = await supabase
+      .from("tags")
+      .upsert(
+        tags.map((name) => ({ name, user_id: user.id })),
+        { onConflict: "user_id,name" },
+      )
+      .select();
+
+    if (!tagError && tagRows) {
+      await supabase
+        .from("bookmark_tags")
+        .insert(tagRows.map((tag) => ({ bookmark_id: bookmark.id, tag_id: tag.id })));
+    }
+  }
+
+  return NextResponse.json(bookmark, { status: 201 });
 };

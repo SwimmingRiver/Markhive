@@ -1,33 +1,10 @@
 import { z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
-import createClient from "@/lib/supabase/server";
 import { parseMetadata } from "@/lib/metadata";
-import { Database } from "@/types/database.types";
 import { analyzeBookmark } from "@/lib/ai";
+import { getSupabaseWithUser } from "@/lib/supabase/api";
 
 const schema = z.object({ url: z.string().url() });
-
-async function getSupabaseWithUser(req: NextRequest) {
-  const token = req.headers.get("authorization")?.replace("Bearer ", "");
-
-  const supabase = token
-    ? createServerClient<Database>(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        {
-          global: { headers: { Authorization: `Bearer ${token}` } },
-          cookies: { getAll: () => [], setAll: () => {} },
-        },
-      )
-    : await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  return { supabase, user };
-}
 
 export const GET = async (req: NextRequest) => {
   const { supabase, user } = await getSupabaseWithUser(req);

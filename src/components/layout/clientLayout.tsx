@@ -1,7 +1,7 @@
 "use client";
 import { ReactNode, useState } from "react";
 import SNB from "./SNB";
-import Header from "./header";
+import Header from "./Header";
 
 interface ClientLayoutProps {
   children: ReactNode;

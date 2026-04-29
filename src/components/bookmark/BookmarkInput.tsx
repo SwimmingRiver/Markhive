@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { usePostBookmarkMutation } from "@/hooks/bookmarks/usePostBookmarkMutation";
+import { useCreateBookmarkMutation } from "@/hooks/bookmarks/useCreateBookmarkMutation";
 
 export default function BookmarkInput() {
   const {
@@ -9,7 +9,7 @@ export default function BookmarkInput() {
     isPending,
     error,
     reset,
-  } = usePostBookmarkMutation();
+  } = useCreateBookmarkMutation();
   const [isRead, setIsRead] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 

@@ -17,6 +17,8 @@ export const useUpdateBookmarkMutation = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
+      queryClient.invalidateQueries({ queryKey: ["recommendation"] });
     },
   });
 };

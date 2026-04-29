@@ -2,7 +2,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { Tables } from "@/types/database.types";
 
-type Bookmark = Tables<"bookmarks">;
+type Bookmark = Tables<"bookmarks"> & {
+  bookmark_tags: { tags: { name: string } | null }[]
+};
 
 export const useGetBookmarksQuery = () => {
   return useQuery<Bookmark[]>({

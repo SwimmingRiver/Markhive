@@ -50,6 +50,18 @@ export default function RecentBookmarks() {
               </div>
               <div className="text-[11.5px] text-subtle truncate">{bookmark.url}</div>
             </div>
+            <div className="flex gap-1.5 shrink-0">
+              {bookmark.bookmark_tags.slice(0, 2).map(({ tags }) =>
+                tags ? (
+                  <span
+                    key={tags.name}
+                    className="px-2 py-0.5 text-[11px] bg-primary-soft border border-border-focus rounded-full text-primary-light"
+                  >
+                    {tags.name}
+                  </span>
+                ) : null
+              )}
+            </div>
             {!bookmark.is_read && (
               <div className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
             )}

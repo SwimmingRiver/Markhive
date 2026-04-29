@@ -20,8 +20,7 @@
   --font-sans: var(--font-dm-sans), sans-serif;
 }
 
-body,
-main {
+body {
   background-color: var(--color-canvas);
   color: var(--color-foreground);
   font-family: var(--font-sans);

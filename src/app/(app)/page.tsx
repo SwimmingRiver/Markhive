@@ -19,7 +19,7 @@ export default async function HomePage() {
   });
 
   return (
-    <div className="px-8 py-10 flex flex-col gap-10 max-w-[760px] mx-auto">
+    <div className="px-8 py-10 flex flex-col gap-10 max-w-[760px] mx-auto w-full">
 
       {/* 인삿말 */}
       <div className="flex flex-col gap-1">

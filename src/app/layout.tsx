@@ -29,7 +29,7 @@ export default function RootLayout({
       <body
         className={`${instrumentSerif.variable} ${dmSans.variable} antialiased`}
       >
-        <main>
+        <main className="h-full">
           <Providers>{children}</Providers>
         </main>
       </body>

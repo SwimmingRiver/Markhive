@@ -23,7 +23,7 @@ export default function QuickSave() {
     <form
       ref={formRef}
       onSubmit={handleSubmit}
-      className="flex items-center gap-2"
+      className="flex items-center gap-2 justify-center w-full"
     >
       <input
         type="url"

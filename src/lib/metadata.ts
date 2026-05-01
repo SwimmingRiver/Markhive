@@ -1,6 +1,7 @@
 type Metadata = {
   title: string | null
   description: string | null
+  image_url: string | null
 }
 
 export async function parseMetadata(url: string): Promise<Metadata> {
@@ -10,7 +11,7 @@ export async function parseMetadata(url: string): Promise<Metadata> {
       signal: AbortSignal.timeout(5000),
     })
 
-    if (!res.ok) return { title: null, description: null }
+    if (!res.ok) return { title: null, description: null, image_url: null }
 
     const html = await res.text()
 
@@ -24,9 +25,15 @@ export async function parseMetadata(url: string): Promise<Metadata> {
       extractMeta(html, 'twitter:description') ??
       extractMeta(html, 'description')
 
-    return { title, description }
+    const rawImage =
+      extractMeta(html, 'og:image') ??
+      extractMeta(html, 'twitter:image')
+
+    const image_url = rawImage ? toAbsoluteUrl(rawImage, url) : null
+
+    return { title, description, image_url }
   } catch {
-    return { title: null, description: null }
+    return { title: null, description: null, image_url: null }
   }
 }
 
@@ -49,6 +56,14 @@ function extractMeta(html: string, property: string): string | null {
 function extractTag(html: string, tag: string): string | null {
   const match = html.match(new RegExp(`<${tag}[^>]*>([^<]+)</${tag}>`, 'i'))
   return match?.[1] ? decode(match[1].trim()) : null
+}
+
+function toAbsoluteUrl(src: string, base: string): string {
+  try {
+    return new URL(src, base).href
+  } catch {
+    return src
+  }
 }
 
 function decode(str: string): string {

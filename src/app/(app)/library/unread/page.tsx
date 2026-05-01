@@ -1,3 +1,5 @@
-export default function LibraryUnreadPage() {
-  return <div>LibraryUnreadPage</div>;
+import { redirect } from "next/navigation";
+
+export default function UnreadPage() {
+  redirect("/library");
 }

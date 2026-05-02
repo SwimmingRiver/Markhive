@@ -1,3 +1,10 @@
+import { Suspense } from "react";
+import LibraryController from "@/components/library/LibraryController";
+
 export default function LibraryPage() {
-  return <div>LibraryPage</div>;
+  return (
+    <Suspense>
+      <LibraryController />
+    </Suspense>
+  );
 }

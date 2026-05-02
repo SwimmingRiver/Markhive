@@ -43,7 +43,7 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
   }
 
-  const { title, description } = await parseMetadata(parsed.data.url);
+  const { title, description, image_url } = await parseMetadata(parsed.data.url);
   const { summary, tags } = await analyzeBookmark({
     url: parsed.data.url,
     title,
@@ -57,6 +57,7 @@ export const POST = async (req: NextRequest) => {
       user_id: user.id,
       title,
       description,
+      image_url,
       summary,
     })
     .select()

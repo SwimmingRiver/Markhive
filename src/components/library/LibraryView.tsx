@@ -18,7 +18,7 @@ export default function LibraryView({
   onStatusChange,
   onTagChange,
 }: LibraryViewProps) {
-  const { data: bookmarks, isLoading } = useReadBookmarksQuery();
+  const { data: bookmarks, isLoading } = useReadBookmarksQuery({});
 
   const allTags = [
     ...new Set(
@@ -34,8 +34,7 @@ export default function LibraryView({
       (status === "unread" && !b.is_read) ||
       (status === "read" && b.is_read);
     const tagOk =
-      !activeTag ||
-      b.bookmark_tags.some((bt) => bt.tags?.name === activeTag);
+      !activeTag || b.bookmark_tags.some((bt) => bt.tags?.name === activeTag);
     return statusOk && tagOk;
   });
 
@@ -43,7 +42,9 @@ export default function LibraryView({
     <div className="px-8 py-10 max-w-[1000px] mx-auto w-full">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="font-serif text-[28px] leading-snug text-foreground">라이브러리</h1>
+        <h1 className="font-serif text-[28px] leading-snug text-foreground">
+          라이브러리
+        </h1>
         <p className="text-[13px] text-muted mt-1">저장한 모든 북마크</p>
       </div>
 

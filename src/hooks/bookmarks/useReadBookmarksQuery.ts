@@ -6,11 +6,18 @@ type Bookmark = Tables<"bookmarks"> & {
   bookmark_tags: { tags: { name: string } | null }[];
 };
 
-export const useReadBookmarksQuery = () => {
+type UseReadBookmarksQueryProps = {
+  limit?: number;
+};
+export const useReadBookmarksQuery = ({
+  limit,
+}: UseReadBookmarksQueryProps) => {
   return useQuery<Bookmark[]>({
-    queryKey: ["bookmarks"],
+    queryKey: ["bookmarks", limit],
     queryFn: async () => {
-      const response = await fetch("/api/bookmarks");
+      const response = await fetch(
+        `/api/bookmarks${limit ? `?limit=${limit}` : ""}`,
+      );
       if (!response.ok) {
         throw new Error(response.statusText);
       }

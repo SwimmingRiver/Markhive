@@ -73,7 +73,9 @@ function BookmarkMenu({ id, isRead }: { id: string; isRead: boolean }) {
 }
 
 export default function RecentBookmarks() {
-  const { data: bookmarks, isLoading } = useReadBookmarksQuery();
+  const { data: recentBookmarks, isLoading } = useReadBookmarksQuery({
+    limit: 5,
+  });
 
   if (isLoading) {
     return (
@@ -90,9 +92,7 @@ export default function RecentBookmarks() {
     );
   }
 
-  if (!bookmarks?.length) return null;
-
-  const recent = bookmarks.slice(0, 5);
+  if (!recentBookmarks?.length) return null;
 
   return (
     <div className="w-full max-w-[720px]">
@@ -108,7 +108,7 @@ export default function RecentBookmarks() {
         </Link>
       </div>
       <div className="flex flex-col gap-2">
-        {recent.map((bookmark) => (
+        {recentBookmarks?.map((bookmark) => (
           <div
             key={bookmark.id}
             className="flex items-center gap-3 px-4 py-3 bg-surface border border-border rounded-lg hover:border-border-focus transition-colors"

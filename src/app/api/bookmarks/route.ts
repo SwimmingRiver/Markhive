@@ -8,15 +8,22 @@ const schema = z.object({ url: z.string().url() });
 
 export const GET = async (req: NextRequest) => {
   const { supabase, user } = await getSupabaseWithUser(req);
-
+  const limit = req.nextUrl.searchParams.get("limit");
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { data, error } = await supabase
+  const query = supabase
     .from("bookmarks")
     .select("*, bookmark_tags(tags(name))")
+    .eq("user_id", user.id)
     .order("created_at", { ascending: false });
+
+  if (limit) {
+    query.limit(Number(limit));
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -43,7 +50,9 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
   }
 
-  const { title, description, image_url } = await parseMetadata(parsed.data.url);
+  const { title, description, image_url } = await parseMetadata(
+    parsed.data.url,
+  );
   const { summary, tags } = await analyzeBookmark({
     url: parsed.data.url,
     title,
@@ -79,7 +88,9 @@ export const POST = async (req: NextRequest) => {
     if (!tagError && tagRows) {
       await supabase
         .from("bookmark_tags")
-        .insert(tagRows.map((tag) => ({ bookmark_id: bookmark.id, tag_id: tag.id })));
+        .insert(
+          tagRows.map((tag) => ({ bookmark_id: bookmark.id, tag_id: tag.id })),
+        );
     }
   }
 

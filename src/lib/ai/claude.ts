@@ -1,7 +1,10 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { AnalyzeInput, AnalyzeOutput } from "./types";
 
-const client = new Anthropic();
+const client = new Anthropic({
+  baseURL: process.env.ANTHROPIC_BASE_URL,
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
 
 export const claude = async (input: AnalyzeInput): Promise<AnalyzeOutput> => {
   const message = await client.messages.create({

@@ -1,12 +1,16 @@
 import { useState, useMemo, useCallback } from "react";
 import { loadRecent, saveRecent } from "@/lib/search/recentKeyword";
 import { useReadBookmarksQuery } from "@/hooks/bookmarks/useReadBookmarksQuery";
+import { useDebounce } from "@/hooks/utils/useDebounce";
+import { DEBOUNCE_DELAY } from "@/constants/numbers";
 
 export const useSearchPage = () => {
   const [query, setQuery] = useState("");
   const [recentSearches, setRecentSearches] = useState<string[]>(loadRecent());
+  const debouncedQuery = useDebounce(query, DEBOUNCE_DELAY);
+
   const { data: searchedBookmarks, isLoading } = useReadBookmarksQuery({
-    search_query: query,
+    search_query: debouncedQuery,
   });
 
   const topTags = useMemo(() => {

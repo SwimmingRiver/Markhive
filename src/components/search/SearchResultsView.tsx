@@ -1,21 +1,28 @@
 "use client";
 
 import BookmarkCard from "@/components/library/BookmarkCard";
-import { Bookmark } from "@/components/library/types";
+import { Tables } from "@/types/database.types";
 
 interface SearchResultsViewProps {
   query: string;
-  results: Bookmark[];
+  results: Tables<"bookmarks">[];
   isLoading: boolean;
   onSearch?: (query: string) => void;
 }
 
-export default function SearchResultsView({ query, results, isLoading }: SearchResultsViewProps) {
+export default function SearchResultsView({
+  query,
+  results,
+  isLoading,
+}: SearchResultsViewProps) {
   if (isLoading) {
     return (
       <div className="grid grid-cols-3 gap-3.5 pt-2">
         {[...Array(6)].map((_, i) => (
-          <div key={i} className="h-[260px] bg-surface border border-border rounded-xl animate-pulse" />
+          <div
+            key={i}
+            className="h-[260px] bg-surface border border-border rounded-xl animate-pulse"
+          />
         ))}
       </div>
     );
@@ -42,7 +49,13 @@ export default function SearchResultsView({ query, results, isLoading }: SearchR
       </p>
       <div className="grid grid-cols-3 gap-3.5">
         {results.map((bookmark) => (
-          <BookmarkCard key={bookmark.id} bookmark={bookmark} />
+          <BookmarkCard
+            key={bookmark.id}
+            bookmark={{
+              ...bookmark,
+              bookmark_tags: [{ tags: null }],
+            }}
+          />
         ))}
       </div>
     </div>

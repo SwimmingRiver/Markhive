@@ -9,18 +9,34 @@ const schema = z.object({ url: z.string().url() });
 export const GET = async (req: NextRequest) => {
   const { supabase, user } = await getSupabaseWithUser(req);
   const limit = req.nextUrl.searchParams.get("limit");
+  const search_query = req.nextUrl.searchParams.get("search_query");
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const query = supabase
+  let query = supabase
     .from("bookmarks")
     .select("*, bookmark_tags(tags(name))")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
   if (limit) {
-    query.limit(Number(limit));
+    query = query.limit(Number(limit));
+  }
+
+  if (search_query) {
+    const q = search_query;
+
+    const { data: tagMatches } = await supabase
+      .from("bookmark_tags")
+      .select("bookmark_id, tags!inner(name)")
+      .ilike("tags.name", `%${q}%`);
+
+    const tagBookmarkIds = tagMatches?.map((t) => t.bookmark_id) ?? [];
+
+    query = query.or(
+      `title.ilike.%${q}%,summary.ilike.%${q}%${tagBookmarkIds.length ? `,id.in.(${tagBookmarkIds.join(",")})` : ""}`,
+    );
   }
 
   const { data, error } = await query;

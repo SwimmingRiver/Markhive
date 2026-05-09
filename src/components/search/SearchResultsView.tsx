@@ -1,17 +1,16 @@
 "use client";
 
 import BookmarkCard from "@/components/library/BookmarkCard";
-import { Tables } from "@/types/database.types";
+import { Bookmark } from "@/components/library/types";
 
 interface SearchResultsViewProps {
   query: string;
-  results: Tables<"bookmarks">[];
+  results: Bookmark[];
   isLoading: boolean;
   onSearch?: (query: string) => void;
 }
 
 export default function SearchResultsView({
-  query,
   results,
   isLoading,
 }: SearchResultsViewProps) {
@@ -53,7 +52,7 @@ export default function SearchResultsView({
             key={bookmark.id}
             bookmark={{
               ...bookmark,
-              bookmark_tags: [{ tags: null }],
+              bookmark_tags: bookmark.bookmark_tags ?? [],
             }}
           />
         ))}

@@ -27,6 +27,5 @@ export const useReadBookmarksQuery = ({
       }
       return response.json();
     },
-    enabled: !!search_query,
   });
 };

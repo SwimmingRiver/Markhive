@@ -24,21 +24,32 @@ export const GET = async (req: NextRequest) => {
     }
   }
 
-  const topTag = Object.entries(tagFrequency).sort((a, b) => b[1] - a[1])[0]?.[0];
+  const topTag = Object.entries(tagFrequency).sort(
+    (a, b) => b[1] - a[1],
+  )[0]?.[0];
 
   if (topTag) {
-    const { data: taggedBookmark } = await supabase
-      .from("bookmarks")
-      .select("*, bookmark_tags!inner(tags!inner(name))")
-      .eq("user_id", user.id)
-      .eq("is_read", false)
-      .eq("bookmark_tags.tags.name", topTag)
-      .order("created_at", { ascending: true })
-      .limit(1)
-      .maybeSingle();
+    const { data: tagMatches } = await supabase
+      .from("bookmark_tags")
+      .select("bookmark_id, tags!inner(name)")
+      .eq("tags.name", topTag);
 
-    if (taggedBookmark) {
-      return NextResponse.json(taggedBookmark);
+    const tagBookmarkIds = tagMatches?.map((t) => t.bookmark_id) ?? [];
+
+    if (tagBookmarkIds.length > 0) {
+      const { data: taggedBookmark } = await supabase
+        .from("bookmarks")
+        .select("*, bookmark_tags(tags(name))")
+        .eq("user_id", user.id)
+        .eq("is_read", false)
+        .in("id", tagBookmarkIds)
+        .order("created_at", { ascending: true })
+        .limit(1)
+        .maybeSingle();
+
+      if (taggedBookmark) {
+        return NextResponse.json(taggedBookmark);
+      }
     }
   }
 

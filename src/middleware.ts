@@ -22,9 +22,15 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isAuthPage =
     pathname.startsWith("/login") || pathname.startsWith("/signup");
-  const isDashboard = pathname.startsWith("/dashboard");
+  const isProtected =
+    pathname === "/" ||
+    pathname.startsWith("/bookmark") ||
+    pathname.startsWith("/library") ||
+    pathname.startsWith("/search") ||
+    pathname.startsWith("/profile") ||
+    pathname.startsWith("/dashboard");
 
-  if (!user && isDashboard) {
+  if (!user && isProtected) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
   if (user && isAuthPage) {

@@ -19,7 +19,7 @@ export default function BrandPanel() {
         {[
           { icon: "⚡", label: "AI 자동 태그 & 요약" },
           { icon: "◎", label: "하루 1개 맞춤 추천" },
-          { icon: "◈", label: "폴더 & 태그 기반 분류" },
+          { icon: "◈", label: "태그 기반 분류" },
         ].map((f) => (
           <div key={f.label} className="flex items-center gap-[10px] text-[12px] text-muted">
             <div className="w-[26px] h-[26px] rounded-[7px] flex items-center justify-center text-[13px] shrink-0 bg-primary-soft">

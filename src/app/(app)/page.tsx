@@ -9,7 +9,7 @@ export default async function HomePage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const displayName = user?.email?.split("@")[0] ?? "님";
+  const displayName = user?.user_metadata?.display_name ?? user?.user_metadata?.full_name ?? user?.email?.split("@")[0] ?? "님";
 
   const today = new Date().toLocaleDateString("ko-KR", {
     year: "numeric",

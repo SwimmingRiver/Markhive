@@ -8,11 +8,13 @@ export const useSignupMutation = () => {
     mutationFn: async ({
       email,
       password,
+      displayName,
     }: {
       email: string;
       password: string;
+      displayName: string;
     }) => {
-      const result = await signUp(email, password);
+      const result = await signUp(email, password, displayName);
 
       if (!result.success) throw new Error(result.error);
       return result;

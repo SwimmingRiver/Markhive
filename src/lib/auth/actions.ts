@@ -3,10 +3,14 @@
 import createClient from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
-export async function signUp(email: string, password: string) {
+export async function signUp(email: string, password: string, displayName: string) {
   const supabase = await createClient();
 
-  const { error } = await supabase.auth.signUp({ email, password });
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: { data: { display_name: displayName } },
+  });
 
   if (error) {
     return { success: false, error: error.message };

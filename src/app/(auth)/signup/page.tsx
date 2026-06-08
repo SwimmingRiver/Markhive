@@ -28,13 +28,16 @@ export default function SignupPage() {
     e.preventDefault();
     const form = e.currentTarget;
     const email = (form.elements.namedItem("email") as HTMLInputElement).value;
-    if (!email || password.length < 8) {
+    const displayName = (
+      form.elements.namedItem("displayName") as HTMLInputElement
+    ).value;
+    if (!email || !displayName || password.length < 8) {
       setError(true);
       return;
     }
     setError(false);
     signup(
-      { email, password },
+      { email, password, displayName },
       {
         onSuccess: () => {
           setDone(true);
@@ -95,6 +98,18 @@ export default function SignupPage() {
       <form onSubmit={handleSubmit} className="flex flex-col">
         <div className="mb-[13px]">
           <label className="block text-[11px] font-medium mb-[6px] tracking-wide text-muted">
+            닉네임
+          </label>
+          <input
+            name="displayName"
+            type="text"
+            placeholder="홍길동"
+            className="w-full rounded-[8px] px-3 py-[9px] text-[13px] border border-border [border-width:0.5px] outline-none bg-overlay text-foreground focus:border-border-focus transition-colors"
+          />
+        </div>
+
+        <div className="mb-[13px]">
+          <label className="block text-[11px] font-medium mb-[6px] tracking-wide text-muted">
             이메일
           </label>
           <input
@@ -142,7 +157,7 @@ export default function SignupPage() {
 
         {error && (
           <div className="text-[11px] rounded-[6px] px-[10px] py-[7px] mb-3 text-error bg-error-bg">
-            이메일과 8자 이상 비밀번호를 입력해주세요.
+            이름, 이메일, 8자 이상 비밀번호를 모두 입력해주세요.
           </div>
         )}
 

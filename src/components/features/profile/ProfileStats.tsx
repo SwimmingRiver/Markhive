@@ -32,7 +32,7 @@ export default function ProfileStats() {
   ];
 
   return (
-    <div className="grid grid-cols-3 gap-3 mb-4">
+    <div className="grid grid-cols-3 gap-3">
       {items.map(({ icon: Icon, label, value, sub }) => (
         <div
           key={label}

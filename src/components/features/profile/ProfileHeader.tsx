@@ -12,7 +12,7 @@ export default function ProfileHeader({ displayName, email, createdAt }: Profile
   });
 
   return (
-    <div className="flex items-center gap-5 bg-surface border border-border rounded-xl p-6 mb-4">
+    <div className="flex items-center gap-5 bg-surface border border-border rounded-xl p-6">
       <div className="shrink-0 w-16 h-16 rounded-full bg-primary flex items-center justify-center text-[22px] font-medium text-white">
         {initial}
       </div>

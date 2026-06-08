@@ -19,9 +19,11 @@ export default async function ProfilePage() {
   const createdAt: string = user.created_at;
 
   return (
-    <div className="p-8 max-w-2xl">
-      <h1 className="font-serif text-[26px] tracking-tight text-foreground mb-1">Profile</h1>
-      <p className="text-[13px] text-subtle mb-7">계정 정보와 설정을 관리하세요</p>
+    <div className="px-8 py-10 flex flex-col gap-6 max-w-[760px] mx-auto w-full">
+      <div>
+        <h1 className="font-serif text-[26px] tracking-tight text-foreground mb-1">Profile</h1>
+        <p className="text-[13px] text-subtle">계정 정보와 설정을 관리하세요</p>
+      </div>
 
       <ProfileHeader displayName={displayName} email={email} createdAt={createdAt} />
       <ProfileStats />

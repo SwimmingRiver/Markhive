@@ -14,7 +14,7 @@ export default function ProfileForm({ displayName, bio, email }: ProfileFormProp
   const [state, action, isPending] = useActionState(updateProfile, null);
 
   return (
-    <div className="bg-surface border border-border rounded-xl p-6 mb-3">
+    <div className="bg-surface border border-border rounded-xl p-6">
       <h2 className="text-[13.5px] font-medium text-muted mb-5">기본 정보</h2>
 
       <form action={action} className="space-y-4">

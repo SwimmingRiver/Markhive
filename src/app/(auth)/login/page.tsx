@@ -4,11 +4,13 @@ import { useState } from "react";
 import Link from "next/link";
 import AuthCard from "@/components/auth/auth-card";
 import { useSigninMutation } from "@/hooks/auth/useSigninMutation";
+import { useGoogleSigninMutation } from "@/hooks/auth/useGoogleSigninMutation";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [error, setError] = useState(false);
   const { mutate: signin, isPending } = useSigninMutation();
+  const { mutate: signinWithGoogle, isPending: isGooglePending } = useGoogleSigninMutation();
   const router = useRouter();
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -45,12 +47,14 @@ export default function LoginPage() {
       {/* Google */}
       <button
         type="button"
+        onClick={() => signinWithGoogle()}
+        disabled={isGooglePending}
         className="w-full flex items-center justify-center gap-[9px] rounded-[9px] px-4 py-[11px] text-[13px] font-medium border border-border [border-width:0.5px] mb-[18px] hover:opacity-80 transition-opacity bg-overlay text-foreground"
       >
         <span className="w-[18px] h-[18px] bg-white rounded-full flex items-center justify-center text-[11px] font-bold text-[#4285F4] shrink-0">
           G
         </span>
-        Google로 계속하기
+        {isGooglePending ? "Google 연결 중..." : "Google로 계속하기"}
       </button>
 
       {/* Divider */}

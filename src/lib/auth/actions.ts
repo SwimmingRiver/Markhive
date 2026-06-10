@@ -1,9 +1,12 @@
 "use server";
 
 import createClient from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
 
-export async function signUp(email: string, password: string, displayName: string) {
+export async function signUp(
+  email: string,
+  password: string,
+  displayName: string,
+) {
   const supabase = await createClient();
 
   const { error } = await supabase.auth.signUp({
@@ -45,7 +48,7 @@ export async function signInWithGoogle() {
     return { success: false, error: error.message };
   }
 
-  redirect(data.url!);
+  return { success: true, url: data.url };
 }
 
 export async function signOut() {
